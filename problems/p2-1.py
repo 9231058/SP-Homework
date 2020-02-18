@@ -61,7 +61,7 @@ class Model:
 
         self.variables.extend([y11, y12])
 
-        ct = self.solver.Constraint(200, self.solver.infinity(), 'wheat_need')
+        ct = self.solver.Constraint(200, self.solver.infinity(), f'wheat_need_s{index}')
         ct.SetCoefficient(self.x1, 2.5)
         ct.SetCoefficient(y11, 1)
         ct.SetCoefficient(y12, -1)
@@ -79,17 +79,26 @@ class Model:
         for v in self.variables:
             print(f'{v.name()}: {v.solution_value()}')
 
+        return self.objective.Value()
+
 
 if __name__ == '__main__':
     mda = Model('stochastic')
     mda.scenario(1, 220, 0.5)
     mda.scenario(2, 300, 0.5)
-    mda.solve()
+
+    print(mda.solver.ExportModelAsLpFormat(False))
+    print()
+
+    stochastic = mda.solve()
 
     mdw = Model('worst')
     mdw.scenario(1, 220, 1)
-    mdw.solve()
+    worst = mdw.solve()
 
     mdb = Model('best')
     mdb.scenario(1, 300, 1)
-    mdb.solve()
+    best = mdb.solve()
+
+    print()
+    print(f'prediction cost = {(worst + best) / 2 - stochastic}')
