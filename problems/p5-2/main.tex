@@ -1,0 +1,96 @@
+\documentclass{article}
+
+\usepackage[margin=1.5in]{geometry} % Please keep the margins at 1.5 so that there is space for grader comments.
+\usepackage{amsmath,amsthm,amssymb,hyperref}
+
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\N}{\mathbf{N}}
+\newcommand{\Q}{\mathbf{Q}}
+
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{claim}[2][Claim]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+\begin{document}
+
+\large % please keep the text at this size for ease of reading.
+
+% ------------------------------------------ %
+%                 START HERE             %
+% ------------------------------------------ %
+
+{\Large Problem 5--2 % Replace with appropriate page number
+\hfill  }
+
+\begin{center}
+{\Large Parham Alvani - 98131910} % Replace "Author's Name" with your name
+\end{center}
+\vspace{0.05in}
+
+% -----------------------------------------------------
+% The "enumerate" environment allows for automatic problem numbering.
+% To make the number for the next problem, type " \item ".
+% To make sub-problems such as (a), (b), etc., use an "enumerate" within an "enumerate."
+% -----------------------------------------------------
+
+\par
+Variables:
+\begin{itemize}
+        \item \(x_{i,l}\) demostrates the amount of product \(l\) that is produced in refinery \(i\)
+        \item \(e_{i,l}\) demostrates the amount of product \(l\) that is exported from refinery \(i\)
+        \item \(s_{i,l}^s\) demostrates the amount of product \(l\) that is stored in node \(i\) under scenario \(s\)
+        \item \(b_{i,l}^s\) demostrates the amount of product \(l\) that is bought from the competitor in node \(i\) under scenario \(s\)
+        \item \(y_{i,j,l,m}\) demostrates the amount of product \(l\) that is sent from node \(i\) to node \(j\) with method \(m\)
+\end{itemize}
+\par
+Objective Function:
+\begin{align*}
+    \min \quad \sum_{i \in I}\sum_{j \in I}\sum_{m \in \{1,2,3,4\}}\sum_{l \in L} c_{i,j,l,m} * y_{i,j.l,m} + \sum_{i \in I_r}\sum_{l \in L} ExC_{i,l} * e_{i,l} + \\
+    \sum_{s \in S} p_s \big[ \sum_{i \in I_d \cup I_c} \sum_{l \in L} IC_{i,l} * s_{i,l}^s + \sum_{i \in I_c} \sum_{l \in L} ShC_{i,l} * b_{i,l}^s \big]
+\end{align*}
+s.t.
+\begin{align*}
+        \sum_{i \in I} \sum_{m \in \{1,2,3,4\}} y_{i,j,l,m} - \sum_{i \in I} \sum_{m \in \{1,2,3,4\}} y_{j,i,l,m} =
+        \begin{cases}
+                d_{j,l}^s + s_{j,l}^s - b_{j,l}^s &\quad \forall l \in L, j \in I_d \cup I_c, s \in S \\
+                -x_{j,l} + e_{j,l} &\quad \forall l \in L, j \in I_r
+        \end{cases}
+\end{align*}
+
+\begin{align*}
+        y_{i,j.l.m} \le a_{i,j,l,m} * M \quad \forall l \in L, i,j \in I, m \in \{1,2,3,4\}
+\end{align*}
+
+\begin{align*}
+        \underline{Rec}_{j,l,m} \sum_{i \in I} y_{i,j,l,m} \le \overline{Rec}_{j,l,m} \quad \forall j \in I, l \in L, m \in \{1,2,3,4\}
+\end{align*}
+
+\begin{align*}
+        \underline{Send}_{j,l,m} \sum_{i \in I} y_{j,i,l,m} \le \overline{Send}_{j,l,m} \quad \forall j \in I, l \in L, m \in \{1,2,3,4\}
+\end{align*}
+
+\begin{align*}
+        x_{i,l} \le b_{i,l} \quad \forall i \in I_r, l \in L
+\end{align*}
+
+\begin{align*}
+        s_{i,l}^s \le f_{i,l} \quad \forall i \in I_c \cup I_d, l \in L, s \in S
+\end{align*}
+
+% ---------------------------------------------------
+% Anything after the \end{document} will be ignored by the typesetting.
+% ----------------------------------------------------
+
+\end{document}
