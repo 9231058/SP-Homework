@@ -80,4 +80,4 @@ if __name__ == "__main__":
     print(mda.solver.ExportModelAsLpFormat(False))
     print()
 
-    stochastic = mda.solve()
+    mda.solve()
