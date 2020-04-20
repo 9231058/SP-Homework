@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "sp-homework"
 version = "0.1.0"
-description = ""
+description = "Dr.Mirhassani Stochastic Programming Course"
 authors = ["Parham Alvani <parham.alvani@gmail.com>"]
 
 [tool.poetry.dependencies]
