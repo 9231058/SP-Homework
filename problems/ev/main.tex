@@ -46,10 +46,9 @@
 % -----------------------------------------------------
 
 \par
-Variables:
 Objective Function:
 \begin{align*}
-    \min \quad c^Tx + \sum_{s \in S}p^s (b^s)^T y^s
+    \min \quad c^Tx + \sum_{s \in S} p^s (b^s)^T y^s
 \end{align*}
 s.t.
 \begin{align*}
@@ -65,11 +64,11 @@ s.t.
 \end{align*}
 
 \begin{align*}
-        a_i \gt 0
+        a_i \ge 0
 \end{align*}
 
 \begin{align*}
-        y^s \gt 0 \quad \forall s \in S
+        y^s \ge 0 \quad \forall s \in S
 \end{align*}
 
 % ---------------------------------------------------
