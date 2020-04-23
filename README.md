@@ -5,3 +5,4 @@ Stochastic programming is an approach for modeling optimization problems that in
 
 1. Necessity of Stochastic Programming
 2. Uncertainty and Modeling
+3. Evaluate the importance of stochastic solutions
