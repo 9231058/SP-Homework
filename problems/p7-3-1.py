@@ -70,4 +70,4 @@ if __name__ == "__main__":
         m = Model(f"({h1}, {h2})", h1, h2, 4, 3)
         optimal = m.solve()
         evrs += 1 / 3 * optimal
-    print(evrs)
+    print(f"EVRS: {evrs}")

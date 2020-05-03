@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     spev = 0.0
     for ps, (h1, h2) in [(1 / 3, (5, 3)), (1 / 3, (3, 2))]:
-        m = Model("f(r, ({h1}, {h2}))", h1, h2)
+        m = Model(f"(r, ({h1}, {h2}))", h1, h2)
         spev += ps * m.solve()
 
     spev *= 1 / (1 - 1 / 3)
