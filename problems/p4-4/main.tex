@@ -1,0 +1,92 @@
+\documentclass{article}
+
+\usepackage[margin=1.5in]{geometry} % Please keep the margins at 1.5 so that there is space for grader comments.
+\usepackage{amsmath,amsthm,amssymb,hyperref}
+
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\N}{\mathbf{N}}
+\newcommand{\Q}{\mathbf{Q}}
+
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{claim}[2][Claim]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+\begin{document}
+
+\large % please keep the text at this size for ease of reading.
+
+% ------------------------------------------ %
+%                 START HERE             %
+% ------------------------------------------ %
+
+{\Large Problem 4--4 % Replace with appropriate page number
+\hfill  }
+
+\begin{center}
+{\Large Parham Alvani - 98131910} % Replace "Author's Name" with your name
+\end{center}
+\vspace{0.05in}
+
+\begin{align*}
+        P(x_3 \le \tilde{A}) \ge 1 - \alpha
+\end{align*}
+
+\begin{align*}
+        P(x_4 \le \tilde{B}) \ge 1 - \alpha
+\end{align*}
+
+\par
+After converting these constraints to normal:
+
+\begin{align*}
+        x_3 \le E(\tilde{A}) - Z_{1-\alpha}\sqrt{Var(\tilde{A})}
+\end{align*}
+
+\begin{align*}
+        x_4 \le E(\tilde{B}) - Z_{1-\alpha}\sqrt{Var(\tilde{B})}
+\end{align*}
+
+\par
+Then we can replace the parameters with their actual values
+
+\begin{align*}
+        x_3 \le 500 - Z_{0.8}\sqrt{6000}
+\end{align*}
+
+\begin{align*}
+        x_4 \le 200 - Z_{0.8}\sqrt{12000}
+\end{align*}
+
+Form the \href{https://www.growingknowing.com/GKStatsBookNormalTable1.html}{standard normal distribution table}, we have gotten:
+
+
+\begin{align*}
+        Z_{0.8} = 0.2881
+\end{align*}
+
+At the end, constraints have the following linear form:
+
+\begin{align*}
+        x_3 \le &500 - 0.2881 \times 77.46 \\
+        & = 477.68
+\end{align*}
+
+\begin{align*}
+        x_4 \le &200 - 0.2881 \times 109.54 \\
+        & = 168.44
+\end{align*}
+
+
+\end{document}
