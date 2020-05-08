@@ -1,0 +1,98 @@
+\documentclass{article}
+
+\usepackage[margin=1.5in]{geometry} % Please keep the margins at 1.5 so that there is space for grader comments.
+\usepackage{amsmath,amsthm,amssymb,hyperref}
+
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\N}{\mathbf{N}}
+\newcommand{\Q}{\mathbf{Q}}
+
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{claim}[2][Claim]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+\begin{document}
+
+\large % please keep the text at this size for ease of reading.
+
+% ------------------------------------------ %
+%                 START HERE             %
+% ------------------------------------------ %
+
+{\Large Problem 12--4 % Replace with appropriate page number
+\hfill  }
+
+\begin{center}
+{\Large Parham Alvani - 98131910} % Replace "Author's Name" with your name
+\end{center}
+\vspace{0.05in}
+
+\par
+\begin{itemize}
+        \item \(e_{t}^{s}\): The flood level in period \(t\) at scenario \(s\)
+        \item \(s_{t}^{s}\): The required water to be imported in period \(t\) at scenario \(s\)
+\end{itemize}
+
+\begin{align*}
+        \min \quad \sum_{s = 1}^{81} p_{s} \sum_{t = 1}^{4} (5000 s_{t}^{s} + 10000 e_{t}^{s})
+\end{align*}
+
+\begin{align*}
+        x_{0}^{s} = -150 \quad \forall s \in [1, 2, \ldots, 81]
+\end{align*}
+
+\begin{align*}
+        x_{t}^{s} = x_{t-1}^{s} + level_{t}^{s} - y_{t}^{s} \quad \forall s \in [1, 2, \ldots, 81], \forall t \in [1, 2, 3, 4]
+\end{align*}
+
+\begin{align*}
+        x_{t}^{s} - e_{t}^{s} \le 0 \quad \forall s \in [1, 2, \ldots, 81], \forall t \in [1, 2, 3, 4]
+\end{align*}
+
+\begin{align*}
+        x_{t}^{s} + s_{t}^{s} \ge -250 \quad \forall s \in [1, 2, \ldots, 81], \forall t \in [1, 2, 3, 4]
+\end{align*}
+
+\par
+Nonanticipativity Constraints (t = 1):
+
+\begin{align*}
+        x_{1}^{s} = x_{1}^{r}&, y_{1}^{s} = y_{1}^{r} \quad \forall s, r \in [1, 2, \ldots, 27]\\
+        x_{1}^{s} = x_{1}^{r}&, y_{1}^{s} = y_{1}^{r} \quad \forall s, r \in [28, 29, \ldots, 54]\\
+        x_{1}^{s} = x_{1}^{r}&, y_{1}^{s} = y_{1}^{r} \quad \forall s, r \in [55, 56, \ldots, 81]
+\end{align*}
+
+
+\par
+Nonanticipativity Constraints (t = 2):
+
+\begin{align*}
+        x_{2}^{s} = x_{2}^{r}&, y_{2}^{s} = y_{2}^{r} \quad \forall s, r \in [1, 2, \ldots, 9]\\
+        x_{2}^{s} = x_{2}^{r}&, y_{2}^{s} = y_{2}^{r} \quad \forall s, r \in [10, 11, \ldots, 18]\\
+        &\vdots\\
+        x_{2}^{s} = x_{2}^{r}&, y_{2}^{s} = y_{2}^{r} \quad \forall s, r \in [73, 74, \ldots, 81]
+\end{align*}
+
+\par
+Nonanticipativity Constraints (t = 3):
+
+\begin{align*}
+        x_{3}^{s} = x_{3}^{r}&, y_{3}^{s} = y_{3}^{r} \quad \forall s, r \in [1, 2, 3]\\
+        x_{3}^{s} = x_{3}^{r}&, y_{3}^{s} = y_{3}^{r} \quad \forall s, r \in [4, 5, 6]\\
+        &\vdots\\
+        x_{3}^{s} = x_{3}^{r}&, y_{3}^{s} = y_{3}^{r} \quad \forall s, r \in [79, 80, 81]
+\end{align*}
+
+\end{document}
