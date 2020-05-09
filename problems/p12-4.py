@@ -52,4 +52,9 @@ months = [
     [(150, 0.5), (50, 0.25), (350, 0.25)],
 ]
 
-print(generate_scenarios(months))
+for i, scenario in enumerate(generate_scenarios(months)):
+    res = f"{i + 1} &"
+    for level in scenario.months:
+        res += f" {level} &"
+    res += f" {scenario.probability}\\\\\\hline"
+    print(res)
