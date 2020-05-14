@@ -1,0 +1,52 @@
+\documentclass{article}
+
+\usepackage{amsmath,amsthm,amssymb,hyperref}
+
+\begin{document}
+
+{\Large Problem 17--2
+        \hfill}
+
+\begin{center}
+{\Large Parham Alvani - 98131910}
+\end{center}
+\vspace{0.05in}
+
+\begin{itemize}
+        \item \(x_{i}\) Decision variable for building a factory in location \(i\)
+        \item \(x'_{j}\) Decision variable for building a distribution center in location \(j\)
+        \item \(y_{i,j,l}^{s}\) Amount of product \(l\) that is sent to distribution center \(j\) from factory \(i\) in scenario \(s\)
+        \item \(z_{j,h,l}^{s}\) Amount of product \(l\) that is sent from distribution center \(j\) to customer \(h\) in scenario \(s\)
+        \item \(u_{h,l}^{s}\) Amount of unsatisfied demand of product \(l\) for customer \(h\) in scenario \(s\)
+\end{itemize}
+
+\begin{align*}
+        \min \quad &\sum_{i \in I} c_i x_i + \sum_{j \in J} c'_j x'_j \\
+        &\sum_{s \in S} p^s [ \\
+        & \sum_{i \in I} \sum_{j \in J} f_{i,j} \sum_{l \in L}  x_{i,j,l}^{s} + \\
+        & \sum_{j \in J} \sum_{h \in H} f'_{j,h} \sum_{l \in L}  z_{i,j,l}^{s} + \\
+        & \sum_{l \in L} g_l \sum_{h \in H} u_{h,l}^{s} \\
+        &]
+\end{align*}
+
+Factory Capacity Constraint
+\begin{align*}
+        \sum_{j \in J} x_{i,j,l}^{s} \le r_{i,l} \quad \forall i \in I, \forall l \in L, \forall s \in S
+\end{align*}
+
+Factory to Distribution Center Constraint
+\begin{align*}
+        \sum_{l \in L} x_{i,j,l}^{s} \le r'_{i,j} \quad \forall i \in I, \forall j \in J, \forall s \in S
+\end{align*}
+
+Distribution Center to Customer Constraint
+\begin{align*}
+        \sum_{l \in L} z_{j,h,l}^{s} \le r''_{j,h} \quad \forall h \in H, \forall j \in J, \forall s \in S
+\end{align*}
+
+Unsatisfied Demand
+\begin{align*}
+        \sum_{j \in J} z_{j,h,l}^{s} = d_{h,l}^{s} - u_{h,l}^{s} \quad \forall h \in H, \forall l \in L, \forall s \in S
+\end{align*}
+
+\end{document}
