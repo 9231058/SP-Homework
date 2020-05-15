@@ -1,0 +1,53 @@
+\documentclass{article}
+
+\usepackage{amsmath,amsthm,amssymb,hyperref}
+
+\begin{document}
+
+{\Large Problem 17--2
+        \hfill}
+
+\begin{center}
+{\Large Parham Alvani - 98131910}
+\end{center}
+\vspace{0.05in}
+
+\begin{itemize}
+        \item \(x_{1, 1}\) Resource 1 usage in the 1st decade
+        \item \(x_{2, 1}\) Resource 2 usage in the 1st decade
+        \item \(x_{3, 1}\) Resource 3 usage in the 1st decade
+        \item \(x_{1, 2}^s\) Resource 1 usage in the 2nd decade in scenario s
+        \item \(x_{2, 2}\) Resource 2 usage in the 2nd decade
+        \item \(x_{3, 2}\) Resource 3 usage in the 2nd decade
+        \item \(y_1\) Investment in resource 1
+        \item \(y_2\) Investment in resource 2
+\end{itemize}
+
+\begin{align*}
+        \min 5x_{1, 1} + 5(0.5 x_{1, 2}^1 + 0.5 x_{1, 2}^2) + 10x_{2, 1} + 10x_{2, 2} + 16.7x_{3, 1} + 16.7x_{3, 2} + y_1 + y_2
+\end{align*}
+
+Resources Capacity in 1st Decade
+\begin{align*}
+        x_{1, 1} &\le 25 \\
+        x_{2, 1} &\le 10
+\end{align*}
+
+Resources Capacity in 2nd Decade
+\begin{align*}
+        x_{1, 2}^2 &\le 25 + y_{1}\\
+        x_{1, 2}^1 &\le 25 + 0.1y_{1}\\
+        x_{2, 2} &\le 10 + y_{2}
+\end{align*}
+
+Demands in 1st Decade
+\begin{align*}
+        x_{1, 1} + x_{2, 1} + x_{3, 1} \le 10
+\end{align*}
+
+Demands in 2nd Decade
+\begin{align*}
+        x_{1, 2}^s + x_{2, 2} + x_{3, 2} \le 25 \quad \forall s \in [1, 2]
+\end{align*}
+
+\end{document}
