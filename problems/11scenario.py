@@ -126,8 +126,8 @@ class BeetSubProblem:
             ct.SetCoefficient(y2, 1)
             ct.SetCoefficient(y3, 1)
 
-            self.objective.SetCoefficient(y2, 1 / n * beet_sell_price_high)
-            self.objective.SetCoefficient(y3, 1 / n * beet_sell_price_low)
+            self.objective.SetCoefficient(y2, -1 / n * beet_sell_price_high)
+            self.objective.SetCoefficient(y3, -1 / n * beet_sell_price_low)
 
     def solve(self, pi_3, pi_4):
         self.objective.SetCoefficient(self.x3, pi_4 + beet_cost)
@@ -157,6 +157,16 @@ class MasterProblem:
             eta = self.solver.NumVar(0, self.solver.infinity(), f"eta_1_{i}")
             x1 = point[0]
             area_ct.SetCoefficient(eta, x1)
+
+            coeff = 0
+            n = len(scenarios)  # probability of each scenario is 1/n
+            for i in range(1, len(point), 2):
+                y1 = point[i]
+                y2 = point[i + 1]
+                coeff = -(y1 * 1 / n * wheat_buy_price) + (
+                    y2 * 1 / n * wheat_sell_price
+                )
+
             self.objective.SetCoefficient(eta, -150 * x1)
             ct.SetCoefficient(eta, 1)
         self.cts.append(ct)
@@ -166,6 +176,14 @@ class MasterProblem:
             eta = self.solver.NumVar(0, self.solver.infinity(), f"eta_2_{i}")
             x2 = point[0]
             area_ct.SetCoefficient(eta, x2)
+
+            coeff = 0
+            n = len(scenarios)  # probability of each scenario is 1/n
+            for i in range(1, len(point), 2):
+                y1 = point[i]
+                y2 = point[i + 1]
+                coeff = -(y1 * 1 / n * corn_buy_price) + (y2 * 1 / n * corn_sell_price)
+
             self.objective.SetCoefficient(eta, -230 * x2)
             ct.SetCoefficient(eta, 1)
         self.cts.append(ct)
@@ -175,7 +193,17 @@ class MasterProblem:
             eta = self.solver.NumVar(0, self.solver.infinity(), f"eta_3_{i}")
             x3 = point[0]
             area_ct.SetCoefficient(eta, x3)
-            self.objective.SetCoefficient(eta, -260 * x3)
+
+            coeff = 0
+            n = len(scenarios)  # probability of each scenario is 1/n
+            for i in range(1, len(point), 2):
+                y2 = point[i]
+                y3 = point[i + 1]
+                coeff = (y2 * 1 / n * beet_sell_price_high) + (
+                    y3 * 1 / n * beet_sell_price_low
+                )
+
+            self.objective.SetCoefficient(eta, -260 * x3 + coeff)
             ct.SetCoefficient(eta, 1)
         self.cts.append(ct)
 
@@ -200,9 +228,18 @@ if __name__ == "__main__":
         pi_3 = mp.cts[2].DualValue()
         pi_4 = mp.cts[4].DualValue()
 
-        if sp.solve(pi_1, pi_2, pi_3) == 0:
-            break
-        sp.points.append((sp.x1.solution_value(), sp.x2.solution_value()))
+        value_1, point_1 = wsp.solve(pi_1, pi_4)
+        value_2, point_2 = csp.solve(pi_2, pi_4)
+        value_3, point_3 = bsp.solve(pi_3, pi_4)
 
-    print(sp.points)
+        value_min = min(value_1, value_2, value_3)
+        if value_min == 0:
+            break
+        if value_min == value_1:
+            wsp.points.append(point_1)
+        if value_min == value_2:
+            csp.points.append(point_2)
+        if value_min == value_3:
+            bsp.points.append(point_3)
+
     print(mp.objective.Value())
