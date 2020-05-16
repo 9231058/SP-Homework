@@ -9,7 +9,8 @@
 
 from ortools.linear_solver import pywraplp
 
-scenarios = [0.5, 0.4, 0.3, 0.2, 0.1, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
+# scenarios = [0.5, 0.4, 0.3, 0.2, 0.1, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
+scenarios = [0.2, 0, -0.2]
 # area represents a total farm area
 area = 500
 wheat_cost = 150
@@ -31,7 +32,10 @@ class WheatSubProblem:
 
     def __init__(self):
         self.variables = []
-        self.points = []
+        initial_point = [0]
+        for _ in scenarios:
+            initial_point.extend([self.require, 0])
+        self.points = [initial_point]
         self.solver = pywraplp.Solver(
             "wheat_sub_problem", pywraplp.Solver.GLOP_LINEAR_PROGRAMMING
         )
@@ -69,7 +73,10 @@ class CornSubProblem:
 
     def __init__(self):
         self.variables = []
-        self.points = []
+        initial_point = [0]
+        for _ in scenarios:
+            initial_point.extend([self.require, 0])
+        self.points = [initial_point]
         self.solver = pywraplp.Solver(
             "corn_sub_problem", pywraplp.Solver.GLOP_LINEAR_PROGRAMMING
         )
@@ -107,7 +114,10 @@ class BeetSubProblem:
 
     def __init__(self):
         self.variables = []
-        self.points = []
+        initial_point = [0]
+        for _ in scenarios:
+            initial_point.extend([0, 0])
+        self.points = [initial_point]
         self.solver = pywraplp.Solver(
             "beet_sub_problem", pywraplp.Solver.GLOP_LINEAR_PROGRAMMING
         )
@@ -206,6 +216,7 @@ class MasterProblem:
             self.objective.SetCoefficient(eta, -260 * x3 + coeff)
             ct.SetCoefficient(eta, 1)
         self.cts.append(ct)
+        self.cts.append(area_ct)
 
     def solve(self):
         self.solver.Solve()
@@ -218,15 +229,13 @@ if __name__ == "__main__":
     csp = CornSubProblem()
     bsp = BeetSubProblem()
 
-    # register initial points
-
     while True:
         mp = MasterProblem(wsp, csp, bsp)
         mp.solve()
         pi_1 = mp.cts[0].DualValue()
         pi_2 = mp.cts[1].DualValue()
         pi_3 = mp.cts[2].DualValue()
-        pi_4 = mp.cts[4].DualValue()
+        pi_4 = mp.cts[3].DualValue()
 
         value_1, point_1 = wsp.solve(pi_1, pi_4)
         value_2, point_2 = csp.solve(pi_2, pi_4)
