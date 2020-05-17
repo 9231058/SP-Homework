@@ -7,6 +7,7 @@
 # [] Created By : Parham Alvani <parham.alvani@gmail.com>
 # =======================================
 
+import math
 from ortools.linear_solver import pywraplp
 
 # scenarios = [0.5, 0.4, 0.3, 0.2, 0.1, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
@@ -56,6 +57,8 @@ class WheatSubProblem:
 
             self.objective.SetCoefficient(y1, 1 / n * wheat_buy_price)
             self.objective.SetCoefficient(y2, -1 / n * wheat_sell_price)
+            self.variables.append(y1)
+            self.variables.append(y2)
 
     def solve(self, pi_1, pi_4):
         self.objective.SetCoefficient(self.x1, pi_4 + wheat_cost)
@@ -97,6 +100,8 @@ class CornSubProblem:
 
             self.objective.SetCoefficient(y1, 1 / n * corn_buy_price)
             self.objective.SetCoefficient(y2, -1 / n * corn_sell_price)
+            self.variables.append(y1)
+            self.variables.append(y2)
 
     def solve(self, pi_2, pi_4):
         self.objective.SetCoefficient(self.x2, pi_4 + corn_cost)
@@ -138,6 +143,8 @@ class BeetSubProblem:
 
             self.objective.SetCoefficient(y2, -1 / n * beet_sell_price_high)
             self.objective.SetCoefficient(y3, -1 / n * beet_sell_price_low)
+            self.variables.append(y2)
+            self.variables.append(y3)
 
     def solve(self, pi_3, pi_4):
         self.objective.SetCoefficient(self.x3, pi_4 + beet_cost)
@@ -152,10 +159,9 @@ class BeetSubProblem:
 class MasterProblem:
     def __init__(self, wsp, csp, bsp):
         self.solver = pywraplp.Solver(
-            "master_problem", pywraplp.Solver.GLOP_LINEAR_PROGRAMMING
+            "master_problem", pywraplp.Solver.CLP_LINEAR_PROGRAMMING
         )
         self.cts = []
-        self.etas = []
 
         self.objective = self.solver.Objective()
         self.objective.SetMaximization()
@@ -173,11 +179,11 @@ class MasterProblem:
             for i in range(1, len(point), 2):
                 y1 = point[i]
                 y2 = point[i + 1]
-                coeff = -(y1 * 1 / n * wheat_buy_price) + (
+                coeff += -(y1 * 1 / n * wheat_buy_price) + (
                     y2 * 1 / n * wheat_sell_price
                 )
 
-            self.objective.SetCoefficient(eta, -150 * x1)
+            self.objective.SetCoefficient(eta, -wheat_cost * x1 + coeff)
             ct.SetCoefficient(eta, 1)
         self.cts.append(ct)
 
@@ -192,9 +198,9 @@ class MasterProblem:
             for i in range(1, len(point), 2):
                 y1 = point[i]
                 y2 = point[i + 1]
-                coeff = -(y1 * 1 / n * corn_buy_price) + (y2 * 1 / n * corn_sell_price)
+                coeff += -(y1 * 1 / n * corn_buy_price) + (y2 * 1 / n * corn_sell_price)
 
-            self.objective.SetCoefficient(eta, -230 * x2)
+            self.objective.SetCoefficient(eta, -corn_cost * x2 + coeff)
             ct.SetCoefficient(eta, 1)
         self.cts.append(ct)
 
@@ -209,11 +215,11 @@ class MasterProblem:
             for i in range(1, len(point), 2):
                 y2 = point[i]
                 y3 = point[i + 1]
-                coeff = (y2 * 1 / n * beet_sell_price_high) + (
+                coeff += (y2 * 1 / n * beet_sell_price_high) + (
                     y3 * 1 / n * beet_sell_price_low
                 )
 
-            self.objective.SetCoefficient(eta, -260 * x3 + coeff)
+            self.objective.SetCoefficient(eta, -beet_cost * x3 + coeff)
             ct.SetCoefficient(eta, 1)
         self.cts.append(ct)
         self.cts.append(area_ct)
@@ -242,7 +248,7 @@ if __name__ == "__main__":
         value_3, point_3 = bsp.solve(pi_3, pi_4)
 
         value_min = min(value_1, value_2, value_3)
-        if value_min == 0:
+        if math.isclose(value_min, 0):
             break
         if value_min == value_1:
             wsp.points.append(point_1)
