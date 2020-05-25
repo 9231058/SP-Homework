@@ -92,10 +92,11 @@ class SubProblem:
         self.objective = self.solver.Objective()
         self.objective.SetMinimization()
 
+        probability = 1 / len(scenarios)
         for index, scenario in enumerate(scenarios):
-            self._wheat_variables_constraint(index, scenario)
-            self._corn_variables_constraint(index, scenario)
-            self._beet_variables_constraints(index, scenario)
+            self._wheat_variables_constraint(index, scenario, probability)
+            self._corn_variables_constraint(index, scenario, probability)
+            self._beet_variables_constraints(index, scenario, probability)
 
     def solve(self, x_1, x_2, x_3):
         x_hat_1 = self.solver.Constraint(x_1, x_1, "x_hat_1")
@@ -110,13 +111,13 @@ class SubProblem:
         self.solver.Solve()
 
         return (
-            1 / len(scenarios) * self.objective.Value(),
+            self.objective.Value(),
             x_hat_1.DualValue(),
             x_hat_2.DualValue(),
             x_hat_3.DualValue(),
         )
 
-    def _wheat_variables_constraint(self, index, scenario):
+    def _wheat_variables_constraint(self, index, scenario, probability):
         y_11 = self.solver.NumVar(0, self.solver.infinity(), f"y_11_{index}")
         y_12 = self.solver.NumVar(0, self.solver.infinity(), f"y_12_{index}")
         v_1 = self.solver.NumVar(0, self.solver.infinity(), f"v_1_{index}")
@@ -126,17 +127,17 @@ class SubProblem:
             "wheat_produce_constraint",
         )
         wheat_produce_constraint.SetCoefficient(
-            self.x_1, WHEAT_PRODUCE * scenario
+            self.x_1, WHEAT_PRODUCE * (1 + scenario)
         )
         wheat_produce_constraint.SetCoefficient(y_11, 1)
         wheat_produce_constraint.SetCoefficient(y_12, -1)
         wheat_produce_constraint.SetCoefficient(v_1, 1)
 
-        self.objective.SetCoefficient(y_11, WHEAT_BUY_PRICE)
-        self.objective.SetCoefficient(y_12, -WHEAT_SELL_PRICE)
+        self.objective.SetCoefficient(y_11, WHEAT_BUY_PRICE * probability)
+        self.objective.SetCoefficient(y_12, -WHEAT_SELL_PRICE * probability)
         self.objective.SetCoefficient(v_1, BIG_M)
 
-    def _corn_variables_constraint(self, index, scenario):
+    def _corn_variables_constraint(self, index, scenario, probability):
         y_21 = self.solver.NumVar(0, self.solver.infinity(), f"y_21_{index}")
         y_22 = self.solver.NumVar(0, self.solver.infinity(), f"y_22_{index}")
         v_2 = self.solver.NumVar(0, self.solver.infinity(), f"v_2_{index}")
@@ -146,17 +147,17 @@ class SubProblem:
             "corn_produce_constraint",
         )
         corn_produce_constraint.SetCoefficient(
-            self.x_2, CORN_PRODUCE * scenario
+            self.x_2, CORN_PRODUCE * (1 + scenario)
         )
         corn_produce_constraint.SetCoefficient(y_21, 1)
         corn_produce_constraint.SetCoefficient(y_22, -1)
         corn_produce_constraint.SetCoefficient(v_2, 1)
 
-        self.objective.SetCoefficient(y_21, CORN_BUY_PRICE)
-        self.objective.SetCoefficient(y_22, -CORN_SELL_PRICE)
+        self.objective.SetCoefficient(y_21, CORN_BUY_PRICE * probability)
+        self.objective.SetCoefficient(y_22, -CORN_SELL_PRICE * probability)
         self.objective.SetCoefficient(v_2, BIG_M)
 
-    def _beet_variables_constraints(self, index, scenario):
+    def _beet_variables_constraints(self, index, scenario, probability):
         y_32 = self.solver.NumVar(0, BEET_MAX_DEMAND, f"y_32_{index}")
         y_33 = self.solver.NumVar(0, self.solver.infinity(), f"y_33_{index}")
         v_3 = self.solver.NumVar(0, self.solver.infinity(), f"v_3_{index}")
@@ -164,14 +165,16 @@ class SubProblem:
             0, self.solver.infinity(), "beet_produce_constraint",
         )
         beet_produce_constraint.SetCoefficient(
-            self.x_3, BEET_PRODUCE * scenario
+            self.x_3, BEET_PRODUCE * (1 + scenario)
         )
         beet_produce_constraint.SetCoefficient(y_32, -1)
         beet_produce_constraint.SetCoefficient(y_33, -1)
         beet_produce_constraint.SetCoefficient(v_3, 1)
 
-        self.objective.SetCoefficient(y_32, -BEET_SELL_PRICE_HIGH)
-        self.objective.SetCoefficient(y_33, -BEET_SELL_PRICE_LOW)
+        self.objective.SetCoefficient(
+            y_32, -BEET_SELL_PRICE_HIGH * probability
+        )
+        self.objective.SetCoefficient(y_33, -BEET_SELL_PRICE_LOW * probability)
         self.objective.SetCoefficient(v_3, BIG_M)
 
 
@@ -198,7 +201,7 @@ def main():
             break
 
         master_problem.add_cut(
-            z_star - pi_1 * x_1 - pi_2 * x_2 - pi_3 * x_3, x_1, x_2, x_3
+            z_star - pi_1 * x_1 - pi_2 * x_2 - pi_3 * x_3, pi_1, pi_2, pi_3
         )
 
 
