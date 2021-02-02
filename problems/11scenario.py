@@ -10,8 +10,8 @@
 import math
 from ortools.linear_solver import pywraplp
 
-# scenarios = [0.5, 0.4, 0.3, 0.2, 0.1, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
-scenarios = [0.2, 0, -0.2]
+scenarios = [0.5, 0.4, 0.3, 0.2, 0.1, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
+# scenarios = [0.2, 0, -0.2]
 # area represents a total farm area
 area = 500
 wheat_cost = 150
@@ -224,6 +224,8 @@ class MasterProblem:
         self.cts.append(ct)
         self.cts.append(area_ct)
 
+        print(self.solver.ExportModelAsLpFormat(False))
+
     def solve(self):
         self.solver.Solve()
 
@@ -235,7 +237,12 @@ if __name__ == "__main__":
     csp = CornSubProblem()
     bsp = BeetSubProblem()
 
+    k = 0
     while True:
+        if k == 10:
+            break
+        print(f"{k:=^20}")
+        k += 1
         mp = MasterProblem(wsp, csp, bsp)
         mp.solve()
         pi_1 = mp.cts[0].DualValue()
